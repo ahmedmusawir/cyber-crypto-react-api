@@ -24,6 +24,8 @@ export const cryptoApi = createApi({
 
 export const { useGetCryptosQuery } = cryptoApi;
 
+// RAPID API CODE SNIPPET FOR THE COIN RANKING API
+
 // const options = {
 //   method: 'GET',
 //   url: 'https://coinranking1.p.rapidapi.com/coins',
