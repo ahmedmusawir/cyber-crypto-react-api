@@ -44,7 +44,7 @@ const Navbar = () => {
           level={2}
           style={{ paddingTop: '1rem', paddingLeft: '.5rem' }}
         >
-          <Link to='/'>Cyberize Crypto</Link>
+          <Link to='/'>Cyber Crypto</Link>
         </Typography.Title>
       </div>
 

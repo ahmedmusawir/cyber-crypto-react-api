@@ -8,7 +8,6 @@ const Cryptocurrencies = ({ simplified }) => {
   const count = simplified ? 10 : 100;
   const { data: cryptosList, isFetching } = useGetCryptosQuery(count);
   const [cryptos, setCryptos] = useState([]);
-  console.log('Simplified in Crypto', simplified);
   //KEEP THE FOLLOWING LINES. THIS WAS NEEDED AT THE BEGINING BEFORE THE USE EFFECT
   // const [cryptos, setCryptos] = useState(cryptosList?.data?.coins);
   // console.log({ cryptos });

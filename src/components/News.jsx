@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Select, Typography, Row, Col, Avatar, Card } from 'antd';
 import moment from 'moment/moment';
 import { useGetCryptoNewsQuery } from '../services/cryptoNewsApi';
+import { useGetCryptosQuery } from '../services/cryptoApi';
 
 const { Text, Title } = Typography;
 const { Option } = Select;
@@ -10,17 +11,42 @@ const demoImageUrl =
 
 const News = ({ simplified }) => {
   const count = simplified ? 6 : 12;
+  const [newsCategory, setNewsCategory] = useState('Cryptocurrency');
   const { data: cryptoNews, isFetching } = useGetCryptoNewsQuery({
-    newsCategory: 'Cryptocurrency',
+    newsCategory,
     count,
   });
+  const { data } = useGetCryptosQuery(100);
+
   // console.log('News Data:', cryptoNews);
 
   if (isFetching) return 'Loading ...';
 
   return (
     <div>
-      <Row gutter={[32, 32]}>
+      <Row gutter={[24, 24]}>
+        {!simplified && (
+          <Col span={24}>
+            <Select
+              showSearch
+              className='select-news'
+              placeholder='Select a Crypto'
+              optionFilterProp='children'
+              onChange={(value) => setNewsCategory(value)}
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+            >
+              <Option value='Cryptocurrency'>Cryptocurrency</Option>
+              {data?.data?.coins.map((coin) => (
+                <Option key={coin.uuid} value={coin.name}>
+                  {coin.name}
+                </Option>
+              ))}
+            </Select>
+          </Col>
+        )}
+
         {cryptoNews?.value?.map((news, i) => (
           <Col xs={24} sm={12} lg={8} key={i}>
             <Card hoverable className='news-card'>
@@ -32,6 +58,11 @@ const News = ({ simplified }) => {
                   <img
                     src={news?.image?.thumbnail?.contentUrl || demoImageUrl}
                     alt=''
+                    style={{
+                      maxWidth: '200px',
+                      maxHeight: '100px',
+                      marginLeft: '.5rem',
+                    }}
                   />
                 </div>
                 <p>
@@ -39,7 +70,10 @@ const News = ({ simplified }) => {
                     ? `${news.description.substring(0, 150)}...`
                     : news.description}
                 </p>
-                <div className='provider-container'>
+                <div
+                  className='provider-container'
+                  style={{ marginTop: '3rem' }}
+                >
                   <div>
                     <Avatar
                       src={
@@ -48,10 +82,13 @@ const News = ({ simplified }) => {
                       }
                       alt='news'
                     />
-                    <Text style={{ paddingLeft: '.5rem' }}>
-                      {moment(news?.datePublished).startOf('ss').fromNow()}
+                    <Text className='provider-name'>
+                      {news.provider[0]?.name}
                     </Text>
                   </div>
+                  <Text>
+                    {moment(news?.datePublished).startOf('ss').fromNow()}
+                  </Text>
                 </div>
               </a>
             </Card>
