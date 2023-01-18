@@ -7,12 +7,25 @@
   --border: #d9d9d9;
 }
 
+// MOOSE STYLES START
 // .ant-menu-dark {
 //   background-color: red !important;
 // }
-.ant-menu-item.ant-menu-item-active {
-  background-color: #0071bd !important;
+// .ant-menu-item.ant-menu-item-active {
+//   background-color: #0071bd !important;
+// }
+
+// None of the following worked to restyle the burger icon in the mobile menu
+.ant-btn.ant-btn-default.menu-control-container {
+  // padding-top: -1rem !important;
+  // border: 4px dotted greenyellow !important;
+  .anticon.anticon-menu {
+    // border: 1px dotted red;
+    // padding-bottom: 1rem !important;
+    // margin-bottom: -1rem !important;
+  }
 }
+// MOOSE STYLES ENDS
 
 * {
   margin: 0;

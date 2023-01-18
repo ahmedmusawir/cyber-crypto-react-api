@@ -12,10 +12,18 @@ const LineChart = ({ coinHistory, currentPrice, coinName }) => {
     coinPrice.push(coinHistory?.data?.history[i].price);
   }
 
+  // for (let i = 0; i < coinHistory?.data?.history?.length; i += 1) {
+  //   coinTimestamp.push(
+  //     new Date(coinHistory?.data?.history[i].timestamp).toLocaleDateString()
+  //   );
+  // }
+
   for (let i = 0; i < coinHistory?.data?.history?.length; i += 1) {
-    coinTimestamp.push(
-      new Date(coinHistory?.data?.history[i].timestamp).toLocaleDateString()
-    );
+    coinPrice.push(coinHistory.data.history[i].price);
+    let date = new Date(coinHistory.data.history[i].timestamp * 1000);
+    let formattedDate =
+      date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear();
+    coinTimestamp.push(formattedDate);
   }
 
   const data = {
@@ -58,7 +66,9 @@ const LineChart = ({ coinHistory, currentPrice, coinName }) => {
           </Title>
         </Col>
       </Row>
-      <Line data={data} options={options} />
+      <Row>
+        <Line data={data} options={options} />
+      </Row>
     </>
   );
 };

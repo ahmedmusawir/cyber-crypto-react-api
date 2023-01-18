@@ -19,7 +19,7 @@ import {
   useGetCryptoDetailsQuery,
   useGetCryptoHistoryQuery,
 } from '../services/cryptoApi';
-// import Loader from './Loader';
+import Loader from './Loader';
 import LineChart from './LineChart';
 
 const { Title, Text } = Typography;
@@ -27,8 +27,7 @@ const { Option } = Select;
 
 const CryptoDetails = () => {
   const { coinId } = useParams();
-  const [timePeriod, setTimePeriod] = useState('');
-  // const [timePeriod, setTimePeriod] = useState('7d');
+  const [timePeriod, setTimePeriod] = useState('7d');
   const { data, isFetching } = useGetCryptoDetailsQuery(coinId);
   const { data: coinHistory } = useGetCryptoHistoryQuery({
     coinId,
@@ -37,10 +36,10 @@ const CryptoDetails = () => {
   const cryptoDetails = data?.data?.coin;
 
   // console.log(cryptoDetails);
-  console.log(coinHistory);
-  console.log(timePeriod);
+  // console.log(coinHistory);
+  // console.log(timePeriod);
 
-  if (isFetching) return 'Loading...';
+  if (isFetching) return <Loader />;
 
   const time = ['3h', '24h', '7d', '30d', '1y', '3m', '3y', '5y'];
 
@@ -53,7 +52,9 @@ const CryptoDetails = () => {
     { title: 'Rank', value: cryptoDetails.rank, icon: <NumberOutlined /> },
     {
       title: '24h Volume',
-      value: `$ ${cryptoDetails.volume && millify(cryptoDetails.volume)}`,
+      value: `$ ${
+        cryptoDetails['24hVolume'] && millify(cryptoDetails['24hVolume'])
+      }`,
       icon: <ThunderboltOutlined />,
     },
     {
@@ -90,106 +91,110 @@ const CryptoDetails = () => {
     },
     {
       title: 'Total Supply',
-      value: `$ ${millify(cryptoDetails.supply.total)}`,
+      value: `$ ${
+        cryptoDetails.supply.total ? millify(cryptoDetails.supply?.total) : 0
+      }`,
       icon: <ExclamationCircleOutlined />,
     },
     {
       title: 'Circulating Supply',
-      value: `$ ${millify(cryptoDetails.supply.circulating)}`,
+      value: `$ ${millify(cryptoDetails.supply?.circulating)}`,
       icon: <ExclamationCircleOutlined />,
     },
   ];
 
   return (
-    <Col className='coin-detail-container'>
-      <Col className='coin-heading-container'>
-        <Title level={2} className='coin-name'>
-          {cryptoDetails.name} ({cryptoDetails.symbol}) Price
-        </Title>
-        <p>
-          {cryptoDetails.name} live price in US dollars. View value statistics,
-          market cap and supply
-        </p>
-      </Col>
-      <Select
-        defaultValue='7d'
-        className='select-timeperiod'
-        placeholder='Select Time Period'
-        onChange={(value) => setTimePeriod(value)}
-      >
-        {time.map((date, i) => (
-          <Option key={i} value={date}>
-            {date}
-          </Option>
-        ))}
-      </Select>
-      {/* LINE CHART */}
-      <LineChart
-        coinHistory={coinHistory}
-        currentPrice={millify(cryptoDetails.price)}
-        coinName={cryptoDetails.name}
-      />
+    <Row style={{ marginTop: '2rem' }}>
+      <Col className='coin-detail-container'>
+        <Col className='coin-heading-container'>
+          <Title level={2} className='coin-name'>
+            {cryptoDetails.name} ({cryptoDetails.symbol}) Price
+          </Title>
+          <p>
+            {cryptoDetails.name} live price in US dollars. View value
+            statistics, market cap and supply
+          </p>
+        </Col>
+        <Select
+          defaultValue='7d'
+          className='select-timeperiod'
+          placeholder='Select Time Period'
+          onChange={(value) => setTimePeriod(value)}
+        >
+          {time.map((date, i) => (
+            <Option key={i} value={date}>
+              {date}
+            </Option>
+          ))}
+        </Select>
+        {/* LINE CHART */}
+        <LineChart
+          coinHistory={coinHistory}
+          currentPrice={millify(cryptoDetails.price)}
+          coinName={cryptoDetails.name}
+        />
 
-      <Col className='stats-container'>
-        <Col className='coin-value-statistics'>
-          <Col className='coin-value-statistics-heading'>
-            <Title className='coin-details-heading' level={3}>
-              {cryptoDetails.name} Value Statistics
-            </Title>
-            <p>An overview showing the stats of {cryptoDetails.name}</p>
-          </Col>
-          {stats.map(({ icon, title, value }, i) => (
-            <Col className='coin-stats' key={i}>
-              <Col className='coin-stats-name'>
-                <Text>{icon}</Text>
-                <Text>{title}</Text>
-              </Col>
-              <Text className='stats'>{value}</Text>
-            </Col>
-          ))}
-        </Col>
-        <Col className='other-stats-info'>
-          <Col className='coin-value-statistics-heading'>
-            <Title className='coin-details-heading' level={3}>
-              {cryptoDetails.name} Other Statistics
-            </Title>
-            <p>An overview showing the stats of all cryptocurrencies</p>
-          </Col>
-          {genericStats.map(({ icon, title, value }, i) => (
-            <Col className='coin-stats' key={i}>
-              <Col className='coin-stats-name'>
-                <Text>{icon}</Text>
-                <Text>{title}</Text>
-              </Col>
-              <Text className='stats'>{value}</Text>
-            </Col>
-          ))}
-        </Col>
-      </Col>
-      <Col className='coin-desc-link'>
-        <Row className='coin-desc'>
-          <Title level={3} className='coin-details-heading'>
-            What is {cryptoDetails.name}
-          </Title>
-          {HTMLReactParser(cryptoDetails.description)}
-        </Row>
-        <Col className='coin-links'>
-          <Title level={3} className='coin-details-heading'>
-            {cryptoDetails.name} Links
-          </Title>
-          {cryptoDetails.links.map((link) => (
-            <Row className='coin-link' key={link.url}>
-              <Title level={4} className='link-name'>
-                {link.type}
+        <Col className='stats-container'>
+          <Col className='coin-value-statistics'>
+            <Col className='coin-value-statistics-heading'>
+              <Title className='coin-details-heading' level={3}>
+                {cryptoDetails.name} Value Statistics
               </Title>
-              <a href={link.url} target='_blank' rel='noreferrer'>
-                {link.name}
-              </a>
-            </Row>
-          ))}
+              <p>An overview showing the stats of {cryptoDetails.name}</p>
+            </Col>
+            {stats.map(({ icon, title, value }, i) => (
+              <Col className='coin-stats' key={i}>
+                <Col className='coin-stats-name'>
+                  <Text>{icon}</Text>
+                  <Text>{title}</Text>
+                </Col>
+                <Text className='stats'>{value}</Text>
+              </Col>
+            ))}
+          </Col>
+          <Col className='other-stats-info'>
+            <Col className='coin-value-statistics-heading'>
+              <Title className='coin-details-heading' level={3}>
+                {cryptoDetails.name} Other Statistics
+              </Title>
+              <p>An overview showing the stats of all cryptocurrencies</p>
+            </Col>
+            {genericStats.map(({ icon, title, value }, i) => (
+              <Col className='coin-stats' key={i}>
+                <Col className='coin-stats-name'>
+                  <Text>{icon}</Text>
+                  <Text>{title}</Text>
+                </Col>
+                <Text className='stats'>{value}</Text>
+              </Col>
+            ))}
+          </Col>
+        </Col>
+        <Col className='coin-desc-link'>
+          <Row className='coin-desc'>
+            <Title level={3} className='coin-details-heading'>
+              What is {cryptoDetails.name}
+            </Title>
+            {HTMLReactParser(cryptoDetails.description)}
+          </Row>
+          <Col className='coin-links'>
+            <Title level={3} className='coin-details-heading'>
+              {cryptoDetails.name} Links
+            </Title>
+            {cryptoDetails.links.map((link) => (
+              <Row className='coin-link' key={link.url}>
+                <Title level={4} className='link-name'>
+                  {link.type}
+                </Title>
+                <a href={link.url} target='_blank' rel='noreferrer'>
+                  {link.name}
+                </a>
+              </Row>
+            ))}
+          </Col>
         </Col>
       </Col>
-    </Col>
+    </Row>
   );
 };
 

@@ -12,6 +12,26 @@ import icon from '../images/cryptocurrency.png';
 
 const Navbar = () => {
   const history = useHistory();
+  const [activeMenu, setActiveMenu] = useState(true);
+  const [screenSize, setScreenSize] = useState(null);
+
+  useEffect(() => {
+    const handleResize = () => setScreenSize(window.innerWidth);
+
+    window.addEventListener('resize', handleResize);
+
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (screenSize < 801) {
+      setActiveMenu(false);
+    } else {
+      setActiveMenu(true);
+    }
+  }, [screenSize]);
 
   const menuItems = [
     {
@@ -46,15 +66,23 @@ const Navbar = () => {
         >
           <Link to='/'>Cyber Crypto</Link>
         </Typography.Title>
+        <Button
+          className='menu-control-container'
+          onClick={() => setActiveMenu(!activeMenu)}
+        >
+          <MenuOutlined />
+        </Button>
       </div>
 
-      <Menu
-        theme='dark'
-        items={menuItems}
-        onClick={({ key }) => {
-          history.push(key);
-        }}
-      />
+      {activeMenu && (
+        <Menu
+          theme='dark'
+          items={menuItems}
+          onClick={({ key }) => {
+            history.push(key);
+          }}
+        />
+      )}
     </div>
   );
 };
