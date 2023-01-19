@@ -22,13 +22,19 @@ const Exchanges = () => {
     <>
       <Row style={{ marginTop: '2rem' }}>
         <Col span={8}>
-          <Title level={4}>Exchanges</Title>
+          <Title className='exchange-title' level={4}>
+            Exchanges
+          </Title>
         </Col>
         <Col span={8}>
-          <Title level={4}>24h Trade Volume</Title>
+          <Title className='exchange-title' level={4}>
+            24h Trade Volume
+          </Title>
         </Col>
         <Col span={8}>
-          <Title level={4}>Markets</Title>
+          <Title className='exchange-title' level={4}>
+            Markets
+          </Title>
         </Col>
       </Row>
       <Row>

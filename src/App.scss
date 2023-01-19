@@ -15,14 +15,26 @@
 //   background-color: #0071bd !important;
 // }
 
-// None of the following worked to restyle the burger icon in the mobile menu
-.ant-btn.ant-btn-default.menu-control-container {
-  // padding-top: -1rem !important;
-  // border: 4px dotted greenyellow !important;
-  .anticon.anticon-menu {
-    // border: 1px dotted red;
-    // padding-bottom: 1rem !important;
-    // margin-bottom: -1rem !important;
+.ant-typography.home-tile {
+  @media (max-width: 600px) {
+    font-size: 1.5rem;
+  }
+  @media (max-width: 400px) {
+    font-size: 1.4rem;
+  }
+}
+.ant-typography.show-more {
+  // border: 5px dotted red;
+  @media (max-width: 600px) {
+    font-size: 1.2rem !important;
+  }
+  @media (max-width: 400px) {
+    font-size: 1rem !important;
+  }
+}
+.exchange-title {
+  @media (max-width: 600px) {
+    font-size: 1rem !important;
   }
 }
 // MOOSE STYLES ENDS
