@@ -1,8 +1,11 @@
-FROM node:16.17.1-alpine
+# Step 1: Build Stage
+FROM node:16.17.1-alpine AS build-stage
 
 WORKDIR /app
 
-COPY package.json .
+COPY package*.json ./
+
+RUN npm config set legacy-peer-deps true
 
 RUN npm install
 
@@ -10,10 +13,9 @@ COPY . .
 
 RUN npm run build
 
-RUN npm install -g serve
+# Step 2: Production Deployment
+FROM nginx:1.13.9-alpine
 
-EXPOSE 3001
+COPY --from=build-stage /app/build /usr/share/nginx/html
 
-CMD ["serve", "-s", "build"]
-
-
+EXPOSE 8005

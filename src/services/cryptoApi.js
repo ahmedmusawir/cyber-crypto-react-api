@@ -39,7 +39,7 @@ export const {
   useGetCryptoHistoryQuery,
 } = cryptoApi;
 
-// RAPID API CODE SNIPPET FOR THE COIN RANKING API
+// RAPID API CODE SNIPPET FOR THE COIN RANKING API (HTML FIVE DEV)
 
 // const options = {
 //   method: 'GET',
